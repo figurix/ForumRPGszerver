@@ -1,8 +1,7 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_1 = require("../models/user.model");
-module.exports = (passport, router) => {
-    router.post('/register', (req, res, next) => {
+var user_model_1 = require("../models/user.model");
+module.exports = function (passport, router) {
+    router.post('/register', function (req, res, next) {
         var username = req.body.username;
         var password = req.body.password;
         console.log(req.body);
@@ -15,13 +14,13 @@ module.exports = (passport, router) => {
             res.status(200).send('Registration successful');
         }
     });
-    router.post('/login', (req, res, next) => {
-        passport.authenticate('login', (error, user) => {
+    router.post('/login', function (req, res, next) {
+        passport.authenticate('login', function (error, user) {
             if (error) {
                 res.status(500).send('ERROR');
             }
             else {
-                req.logIn(user, (error) => {
+                req.logIn(user, function (error) {
                     if (error) {
                         return res.status(500).send('Request login failed');
                     }
@@ -32,7 +31,7 @@ module.exports = (passport, router) => {
             }
         })(req, res, next);
     });
-    router.post('/logout', (req, res, next) => {
+    router.post('/logout', function (req, res, next) {
         if (req.isAuthenticated()) {
             req.logout();
             res.status(200).send('Logout successful');
@@ -41,7 +40,7 @@ module.exports = (passport, router) => {
             res.status(500).send('You have no right');
         }
     });
-    router.get('/greeting', (req, res, next) => {
+    router.get('/greeting', function (req, res, next) {
         if (req.isAuthenticated()) {
             return res.status(200).send('hello!');
         }

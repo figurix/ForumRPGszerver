@@ -1,6 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose = require("mongoose");
+var mongoose = require("mongoose");
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 ;
