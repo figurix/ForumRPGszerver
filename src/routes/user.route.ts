@@ -5,11 +5,12 @@ module.exports = (passport, router) => {
     router.post('/register', (req, res, next) => {
         var username = req.body.username;
         var password = req.body.password;
+        var email = req.body.email;
         console.log(req.body);
-        if(!username || !password) {
-            return res.status(500).send('Username and password is required.');
+        if(!username || !password || !email) {
+            return res.status(500).send('Username, email and password is required.');
         } else {
-            var user = new User({username: username, password: password});
+            var user = new User({username: username, password: password, email: email});
             user.save();
             res.status(200).send('Registration successful');
         }

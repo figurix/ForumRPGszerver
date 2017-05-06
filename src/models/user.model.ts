@@ -1,23 +1,36 @@
 import * as mongoose from 'mongoose';
 
+
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 
 export interface IUser extends mongoose.Document {
   username: string; 
-  password: string; 
+  email: string;
+  password: string;
+  countHsz: number;
+  character: any;
+  admin: boolean;
 };
 
 export const UserSchema = new mongoose.Schema({
-    username: String,
-    password: String
+    username: {type: String, unique: true},
+    email: {type: String, unique: true},
+    password: String,
+    countHsz: {type: Number, default: 0},
+    character: [{name: String, 
+      level: {type: Number, default: 1},
+      attack: {type: Number, default: 1},
+      defense: {type: Number, default: 1}
+    }],
+    admin: {type: Boolean, default: false}
 });
 
 // hash the password before save
 UserSchema.pre('save', function preSaveCallback(next) {
   // user
   var _this = this;
-
+  
   // only hash the password if it has been modified (or is new)
   if (!_this.isModified('password')) {
     return next();

@@ -5,8 +5,16 @@ var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 ;
 exports.UserSchema = new mongoose.Schema({
-    username: String,
-    password: String
+    username: { type: String, unique: true },
+    email: { type: String, unique: true },
+    password: String,
+    countHsz: { type: Number, default: 0 },
+    character: [{ name: String,
+            level: { type: Number, default: 1 },
+            attack: { type: Number, default: 1 },
+            defense: { type: Number, default: 1 }
+        }],
+    admin: { type: Boolean, default: false }
 });
 // hash the password before save
 exports.UserSchema.pre('save', function preSaveCallback(next) {

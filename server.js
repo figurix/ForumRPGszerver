@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 // Connect to MongoDB...
-var dbUrl = 'mongodb://test:asdasd@ds157439.mlab.com:57439/mongo-db-example';
+var dbUrl = 'mongodb://teszt:teszt@ds111461.mlab.com:11461/forumrpg';
 var app = express();
 app.set('dbUrl', dbUrl);
 mongoose.connect(dbUrl);
