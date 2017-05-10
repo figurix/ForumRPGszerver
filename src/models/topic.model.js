@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 ;
 exports.TopicSchema = new mongoose.Schema({
-    creator: mongoose.Schema.Types.ObjectId,
-    threads: [mongoose.Schema.Types.ObjectId],
+    creator: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    threads: { type: Number, ref: 'Thread' },
     title: { type: String, unique: true }
 });
 exports.Topic = mongoose.model('Topic', exports.TopicSchema);
