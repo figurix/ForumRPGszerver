@@ -25,7 +25,7 @@ module.exports = (passport, router) => {
                     if(error) {
                         return res.status(500).send('Request login failed');
                     } else {
-                        return res.status(200).send('You are free to pass' + user);
+                        return res.status(200).send('You are free to pass');
                     }
                 })
             }

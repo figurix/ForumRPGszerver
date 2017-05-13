@@ -7,6 +7,7 @@ export interface IThread extends mongoose.Document {
   participants: any;
   creator: any;
   posts: any;
+  partcount: number;
 };
 
 export const ThreadSchema = new mongoose.Schema({
@@ -14,7 +15,8 @@ export const ThreadSchema = new mongoose.Schema({
     creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     topic: {type: mongoose.Schema.Types.ObjectId, ref: 'Topic'},
     participants: {type: [mongoose.Schema.Types.ObjectId], ref: 'User'},
-    posts: {type: [mongoose.Schema.Types.ObjectId], ref: 'Post'}
+    posts: {type: [mongoose.Schema.Types.ObjectId], ref: 'Post'},
+    partcount: Number
 });
 
 export const Thread: mongoose.model<IThread> = mongoose.model<IThread>('Thread', ThreadSchema);
