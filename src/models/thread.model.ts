@@ -5,7 +5,6 @@ export interface IThread extends mongoose.Document {
   mainpost: string;
   participants: any;
   creator: any;
-  posts: any;
   partcount: number;
   minlevel: number;
   maxlevel: number;
@@ -18,7 +17,6 @@ export const ThreadSchema = new mongoose.Schema({
     mainpost: String,
     creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     participants: {type: [mongoose.Schema.Types.ObjectId], ref: 'User'},
-    posts: {type: [mongoose.Schema.Types.ObjectId], ref: 'Post'},
     partcount: {type: Number, default: 0},
     minlevel: {type: Number, default: 0},
     maxlevel: {type: Number, default: 0},

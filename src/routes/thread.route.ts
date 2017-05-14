@@ -4,7 +4,7 @@ module.exports = (passport, router) => {
     router.get('/showthreads', (req, res, next) => {
         if(req.isAuthenticated()) {
             var query = Thread.find().limit(20);
-            query.select('title mainpost maxcount partcount minlvel maxlevel creator postcount');
+            query.select('title mainpost maxcount partcount minlevel maxlevel creator postcount');
             query.exec(function(err, threads) {
                 if(err) {
                     res.send(err);
@@ -13,7 +13,7 @@ module.exports = (passport, router) => {
             })
         }
         else {
-            res.status(500).send("Nem vagy bejelentkezve!");
+            res.status(403).send("Nem vagy bejelentkezve!");
         }
     })
     router.post('/new', (req, res, next) => {
@@ -29,7 +29,7 @@ module.exports = (passport, router) => {
                 res.json(thread);
         }
         else {
-            res.status(500).send("Jelentkezz be!");
+            res.status(403).send("Jelentkezz be!");
         }
     })
 

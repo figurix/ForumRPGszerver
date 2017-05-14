@@ -48,6 +48,17 @@ module.exports = (passport, router) => {
             return res.status(500).send('stop that');
         }
     })
-
+    router.get('/isadmin', (req, res, next) => {
+        if(req.isAuthenticated()) {
+            if(req.user.admin) {
+                res.status(200).send("admin");
+            }
+            else {
+                res.status(500).send("nem az");
+            }
+        } else {
+            return res.status(500).send('be se vagy jelentkezve :(');
+        }
+    })
     return router;
 }
