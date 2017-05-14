@@ -51,6 +51,7 @@ app.use(passport.session());
 
 app.use('/rest/user', require('./src/routes/user.route')(passport, express.Router()));
 app.use('/rest/thread', require('./src/routes/thread.route')(passport, express.Router()));
+app.use('/rest/post', require('./src/routes/post.route')(passport, express.Router()));
 
 app.listen(5000, () => {
     console.log('The server is running');

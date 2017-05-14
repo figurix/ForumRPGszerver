@@ -41,9 +41,9 @@ module.exports = (passport, router) => {
         }
     })
 
-    router.get('/greeting', (req, res, next) => {
+    router.get('/characters', (req, res, next) => {
         if(req.isAuthenticated()) {
-            return res.status(200).send('hello!');
+            return res.status(200).send(req.user.character);
         } else {
             return res.status(500).send('stop that');
         }
