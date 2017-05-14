@@ -28,8 +28,6 @@ module.exports = (passport, router) => {
             res.status(500).send("Jelentkezz be!");
         }
     })
-    router.post('/choose', (req, res, next) => {
-        Topic.findOne({"title": })
-    })
+    
     return router;
 }
