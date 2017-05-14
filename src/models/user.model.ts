@@ -18,11 +18,11 @@ export const UserSchema = new mongoose.Schema({
     email: {type: String, unique: true},
     password: String,
     countHsz: {type: Number, default: 0},
-    character: [{name: String, 
+    character: { 
       level: {type: Number, default: 1},
       attack: {type: Number, default: 1},
       defense: {type: Number, default: 1}
-    }],
+    },
     admin: {type: Boolean, default: false}
 });
 

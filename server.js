@@ -46,7 +46,7 @@ app.use(expressSession({ secret: 'thegreatandsecretshow' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/rest/user', require('./src/routes/user.route')(passport, express.Router()));
-app.use('/rest/topic', require('./src/routes/topic.route')(passport, express.Router()));
+app.use('/rest/thread', require('./src/routes/thread.route')(passport, express.Router()));
 app.listen(5000, () => {
     console.log('The server is running');
 });
