@@ -83,8 +83,23 @@ module.exports = (passport, router) => {
             var thread = req.body.threadid;
             Thread.findById(thread, function(err, threadd) {
                 if(req.user._id==threadd.creator) {
-                    
-                    res.status(200).send("elmentve");
+                    var query = User.find({thread: thread});
+                    query.exec(function(err, users) {
+                        if(err) {
+                            res.send(err);
+                        }
+                        users.forEach(element => {
+                            element.occupied = false;
+                            element.thread = undefined;
+                            element.character.level = element.character.level + 1;
+                            element.character.attack = element.character.attack + 1;
+                            element.character.defense = element.character.defense + 1;
+                            element.save();
+                        });
+                        threadd.closed = true;
+                        threadd.save();
+                        res.status(200).send("lezarva");
+                    })
                 }
                 else {
                     res.status(403).send("Nincs jogod!");
