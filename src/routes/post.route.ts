@@ -18,15 +18,24 @@ module.exports = (passport, router) => {
     })
     router.post('/new', (req, res, next) => {
         if(req.isAuthenticated()) {
-                var creator = req.user._id;
-                var thread = req.body.threadid();
-                var text = req.body.text;
-                var post = new Post({creator: creator, thread: thread, text: text});
-                post.save();
-                Thread.findById(thread, function(err, threadd) {
+            var thread = req.body.threadid;
+            Thread.findById(thread, function(err, threadd) {
+                if(req.user.thread==threadd._id) {
+                    var creator = req.user._id;
+                    
+                    var text = req.body.text;
+                    var post = new Post({creator: creator, thread: thread, text: text});
+                    post.save();
+                    
                     threadd.postcount = threadd.postcount+1;
                     threadd.save();
-                });
+                    res.status(200).send("elmentve");
+                }
+                 else {
+                    res.status(403).send("Nem tartozol a kalandhoz!");
+                }
+            });
+           
         }
         else {
             res.status(403).send("Jelentkezz be!");
@@ -49,8 +58,12 @@ module.exports = (passport, router) => {
     router.post('/mod', (req, res, next) => {
         if(req.isAuthenticated()) {
             if(req.user.admin) {
-                var query = Post.find({thread: req.body.threadid}).limit(20);
-                
+                var query = Post.findOne({thread: req.body.threadid});
+                query.exec(function (err, post) {
+                    post.text = req.body.text;
+                    post.save();
+                })
+                res.status(200).send("modositva");
             }
             else {
                 res.status(500).send("Csak admin modosithat!");

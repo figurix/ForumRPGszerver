@@ -10,6 +10,7 @@ export interface IThread extends mongoose.Document {
   maxlevel: number;
   maxcount: number;
   postcount: number;
+  closed: boolean;
 };
 
 export const ThreadSchema = new mongoose.Schema({
@@ -21,7 +22,8 @@ export const ThreadSchema = new mongoose.Schema({
     minlevel: {type: Number, default: 0},
     maxlevel: {type: Number, default: 0},
     maxcount: {type: Number, default: 0},
-    postcount: {type: Number, default: 0}
+    postcount: {type: Number, default: 0},
+    closed: {type: Boolean, default: false}
 });
 
 export const Thread: mongoose.model<IThread> = mongoose.model<IThread>('Thread', ThreadSchema);

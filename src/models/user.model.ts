@@ -11,6 +11,8 @@ export interface IUser extends mongoose.Document {
   countHsz: number;
   character: any;
   admin: boolean;
+  thread: any;
+  occupied: boolean;
 };
 
 export const UserSchema = new mongoose.Schema({
@@ -23,7 +25,9 @@ export const UserSchema = new mongoose.Schema({
       attack: {type: Number, default: 1},
       defense: {type: Number, default: 1}
     },
-    admin: {type: Boolean, default: false}
+    admin: {type: Boolean, default: false},
+    thread: {type: mongoose.Schema.Types.ObjectId, ref: 'Thread'},
+    occupied: {type: Boolean, default: false}
 });
 
 // hash the password before save
