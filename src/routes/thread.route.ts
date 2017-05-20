@@ -96,7 +96,22 @@ module.exports = (passport, router) => {
             res.status(403).send("Nem vagy bejelentkezve!");
         }
     })
-
+    router.post('/get', (req, res, next) => {
+        if(req.isAuthenticated()) {
+            var thread = req.body.threadid;
+            var query = Thread.findOne({_id: thread});
+            query.select('title mainpost maxcount partcount minlevel maxlevel creator postcount');
+            query.populate('creator').exec(function(err, threads) {
+                if(err) {
+                    res.status(500).send(err);
+                }
+                res.status(200).send(threads);
+            })
+        }
+        else {
+            res.status(403).send("Nem vagy bejelentkezve!");
+        }
+    })
     router.post('/finish', (req, res, next) => {
         if(req.isAuthenticated()) {
             var thread = req.body.threadid;
