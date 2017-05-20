@@ -1,11 +1,12 @@
 import {Post} from '../models/post.model';
 import {Thread} from '../models/thread.model';
+import {User} from '../models/user.model';
 
 module.exports = (passport, router) => {
     router.post('/showposts', (req, res, next) => {
         if(req.isAuthenticated()) {
-            var query = Post.find({thread: req.body.threadid}).limit(20);
-            query.exec(function(err, posts) {
+            var query = Post.find({thread: req.body.threadid});
+            query.populate('creator').exec(function(err, posts) {
                 if(err) {
                     res.send(err);
                 }

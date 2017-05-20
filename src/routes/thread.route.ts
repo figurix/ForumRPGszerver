@@ -4,7 +4,7 @@ import {User} from '../models/user.model';
 module.exports = (passport, router) => {
     router.get('/showthreads', (req, res, next) => {
         if(req.isAuthenticated()) {
-            var query = Thread.find().limit(20);
+            var query = Thread.find();
             query.select('title mainpost maxcount partcount minlevel maxlevel creator postcount');
             query.populate('creator').exec(function(err, threads) {
                 if(err) {
