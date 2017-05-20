@@ -6,12 +6,13 @@ module.exports = (passport, router) => {
         if(req.isAuthenticated()) {
             var query = Thread.find().limit(20);
             query.select('title mainpost maxcount partcount minlevel maxlevel creator postcount');
-            query.exec(function(err, threads) {
+            query.populate('creator').exec(function(err, threads) {
                 if(err) {
-                    res.send(err);
+                    res.status(500).send(err);
                 }
                 res.status(200).send(threads);
             })
+
         }
         else {
             res.status(403).send("Nem vagy bejelentkezve!");
@@ -27,7 +28,7 @@ module.exports = (passport, router) => {
                 var mainpost = req.body.mainpost;
                 var thread = new Thread({creator: creator, maxcount: maxcount, maxlevel: maxlevel, minlevel: minlevel, mainpost: mainpost, title: title});
                 thread.save();
-                res.json(thread);
+                res.status(200).json(thread);
         }
         else {
             res.status(403).send("Jelentkezz be!");
