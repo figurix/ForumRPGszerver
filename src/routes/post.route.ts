@@ -42,7 +42,7 @@ module.exports = (passport, router) => {
             res.status(403).send("Jelentkezz be!");
         }
     })
-    router.delete('/del', (req, res, next) => {
+    router.post('/del', (req, res, next) => {
         if(req.isAuthenticated()) {
             if(req.user.admin) {
                 Post.remove({ _id: req.body.postid}, function (err) {
