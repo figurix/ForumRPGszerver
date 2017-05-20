@@ -57,7 +57,15 @@ module.exports = (passport, router) => {
                 res.status(500).send("nem az");
             }
         } else {
-            return res.status(500).send('be se vagy jelentkezve :(');
+            res.status(500).send('be se vagy jelentkezve :(');
+        }
+    })
+    router.get('/profile', (req, res, next) => {
+        if(req.isAuthenticated()) {
+            res.status(200).json(req.user);
+        }
+        else {
+            res.status(500).send("nem vagy bejelentkezve");
         }
     })
     return router;
