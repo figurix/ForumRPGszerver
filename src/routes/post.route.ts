@@ -45,8 +45,11 @@ module.exports = (passport, router) => {
     router.delete('/del', (req, res, next) => {
         if(req.isAuthenticated()) {
             if(req.user.admin) {
-                Post.remove({ _id: req.body.postid});
-                res.status(200).send("torolve");
+                Post.remove({ _id: req.body.postid}, function (err) {
+                if (err) res.status(500).send(err);
+                else res.status(200).send("torolve");
+                });
+                
             }
             else {
                 res.status(500).send("Csak admin torolhet!");
