@@ -68,5 +68,27 @@ module.exports = (passport, router) => {
             res.status(500).send("nem vagy bejelentkezve");
         }
     })
+    router.post('/getuser', (req, res, next) => {
+        if(req.isAuthenticated()) {
+            var query = User.findOne({_id: req.body.userid});
+            query.exec(function(err, user) {
+                if(err) {
+                    res.status(500).send(err);
+                }
+                res.status(200).send(user);
+            })
+        }
+        else {
+            res.status(500).send("nem vagy bejelentkezve");
+        }
+    })
+    router.post('/del', (req, res, next) => {
+        if(req.isAuthenticated()) {
+            if(req.user.admin) {
+                var userid = req.body.userid;
+
+            }
+        }
+    })
     return router;
 }
