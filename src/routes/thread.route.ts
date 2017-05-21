@@ -125,11 +125,15 @@ module.exports = (passport, router) => {
                         users.forEach(element => {
                             element.occupied = false;
                             element.thread = undefined;
-                            element.character.level = element.character.level + 1;
-                            element.character.attack = element.character.attack + 1;
-                            element.character.defense = element.character.defense + 1;
+                            if(threadd.creator != element.id) {
+                                element.character.level = element.character.level + 1;
+                                element.character.attack = element.character.attack + 1;
+                                element.character.defense = element.character.defense + 1;
+                            }
                             element.save();
                         });
+                        req.user.occupied = false;
+                        req.user.thread = undefined;
                         threadd.closed = true;
                         threadd.save();
                         res.status(200).send("lezarva");
