@@ -68,6 +68,13 @@ UserSchema.methods.comparePassword = function comparePassword(candidatePassword,
     cb(null, isMatch);
   });
 };
-
+/*
+UserSchema.pre('remove', function preRM(next) {
+  console.log(this._id);
+  this.model('PostSchema').remove({ creator: this._id }, {multi: true} , next);
+  //this.model('ThreadSchema').remove({ creator: this._id });
+  console.log("itt vagyok");
+});
+*/
 
 export const User: mongoose.model<IUser> = mongoose.model<IUser>('User', UserSchema);

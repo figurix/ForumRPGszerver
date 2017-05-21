@@ -1,4 +1,5 @@
 import {User} from '../models/user.model';
+import {Thread} from '../models/thread.model';
 
 module.exports = (passport, router) => {
 
@@ -85,8 +86,10 @@ module.exports = (passport, router) => {
     router.post('/del', (req, res, next) => {
         if(req.isAuthenticated()) {
             if(req.user.admin) {
-                var userid = req.body.userid;
-
+                User.remove({ _id: req.body.userid}, function (err) {
+                    if (err) res.status(500).send(err);
+                    else res.status(200).send("torolve");
+                }); 
             }
         }
     })
