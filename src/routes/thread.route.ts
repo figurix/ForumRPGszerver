@@ -5,8 +5,8 @@ module.exports = (passport, router) => {
     router.get('/showthreads', (req, res, next) => {
         if(req.isAuthenticated()) {
             var query = Thread.find();
-            query.select('title mainpost maxcount partcount minlevel maxlevel creator postcount');
-            query.populate('creator').exec(function(err, threads) {
+            query.select('title mainpost maxcount partcount minlevel maxlevel creator postcount created');
+            query.populate('creator').sort({created: -1}).exec(function(err, threads) {
                 if(err) {
                     res.status(500).send(err);
                 }

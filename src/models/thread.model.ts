@@ -12,6 +12,7 @@ export interface IThread extends mongoose.Document {
   postcount: number;
   started: boolean;
   closed: boolean;
+  created: Date;
 };
 
 export const ThreadSchema = new mongoose.Schema({
@@ -25,7 +26,8 @@ export const ThreadSchema = new mongoose.Schema({
     maxcount: {type: Number, default: 0},
     postcount: {type: Number, default: 0},
     closed: {type: Boolean, default: false},
-    started: {type: Boolean, default: false}
+    started: {type: Boolean, default: false},
+    created: {type: Date, default: Date.now}
 });
 
 export const Thread: mongoose.model<IThread> = mongoose.model<IThread>('Thread', ThreadSchema);
