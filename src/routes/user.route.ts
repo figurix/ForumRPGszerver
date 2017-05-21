@@ -86,15 +86,32 @@ module.exports = (passport, router) => {
     router.post('/del', (req, res, next) => {
         if(req.isAuthenticated()) {
             if(req.user.admin) {
-                Thread.findOne({_id: req.body.thread}, function (err, t) {
+                var threadid;
+                User.findOne({_id: req.body.userid}, function (err,u) {
                     if(err) res.status(500).send(err);
-                    t.partcount = t.partcount-1;
-                    t.save();
+                    if(u != null) {
+                        threadid = u.thread;
+                        Thread.findOne({_id: threadid}, function (err, t) {
+                            if(t!=null) {
+                                if(err) res.status(500).send(err);
+                                if(t.creator != req.body.userid) {
+                                    t.partcount = t.partcount-1;
+                                }
+                                t.save();
+                            }
+                            else {
+                                res.status(404).send("a thread nem talalhato");
+                            }
+                            u.remove(function(err){
+                                if(err) res.status(500).send("remove nem jo");
+                                else res.status(200).send("torolve");
+                            });
+                        });
+                    }
+                    else {
+                        res.status(404).send("a user nem talalhato");
+                    }
                 });
-                User.remove({ _id: req.body.userid}, function (err) {
-                    if (err) res.status(500).send(err);
-                    else res.status(200).send("torolve");
-                }); 
             }
         }
     })

@@ -45,10 +45,15 @@ module.exports = (passport, router) => {
     router.post('/del', (req, res, next) => {
         if(req.isAuthenticated()) {
             if(req.user.admin) {
-                Thread.findOne({_id: req.body.thread}, function (err, t) {
+                var threadid;
+                Post.findOne({_id: req.body.postid}, function (err,p) {
                     if(err) res.status(500).send(err);
-                    t.postcount = t.postcount-1;
-                    t.save();
+                    threadid = p.thread;
+                    Thread.findOne({_id: threadid}, function (err, t) {
+                        if(err) res.status(500).send(err);
+                        t.postcount = t.postcount-1;
+                        t.save();
+                    });
                 });
                 Post.remove({ _id: req.body.postid}, function (err) {
                 if (err) res.status(500).send(err);

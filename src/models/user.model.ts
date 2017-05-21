@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-
+import {Thread} from '../models/thread.model';
 
 var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
@@ -26,7 +26,7 @@ export const UserSchema = new mongoose.Schema({
       defense: {type: Number, default: 1}
     },
     admin: {type: Boolean, default: false},
-    thread: {type: mongoose.Schema.Types.ObjectId, ref: 'Thread'},
+    thread: {type: mongoose.Schema.Types.ObjectId, default: undefined, ref: 'Thread'},
     occupied: {type: Boolean, default: false}
 });
 
@@ -76,5 +76,10 @@ UserSchema.pre('remove', function preRM(next) {
   console.log("itt vagyok");
 });
 */
+UserSchema.pre('remove', function(next) {
+  var _this = this;
+  Thread.remove({creator: _this._id}).exec();
+  next();
+});
 
 export const User: mongoose.model<IUser> = mongoose.model<IUser>('User', UserSchema);
