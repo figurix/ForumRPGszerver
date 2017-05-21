@@ -30,19 +30,25 @@ module.exports = (passport, router) => {
                 var threadid;
                 var thread = new Thread({creator: creator, maxcount: maxcount, maxlevel: maxlevel, minlevel: minlevel, mainpost: mainpost, title: title});
                 thread.save(function(err,th) {
-                    threadid = th._id;
+                    User.findById(req.user._id, function(err, user) {
+                     if(err) {
+                            res.send(err);
+                     }
+                        user.occupied = true;
+                        user.thread = thread._id;
+                        console.log(threadid);
+                        
+                        
+                        user.save(function(err, th) {
+                            if(err) res.send(err);
+                            else {
+                                req.user.occupied = true;
+                                req.user.thread = thread._id;
+                                res.status(200).json(thread);
+                            }
+                        });
+                    })
                 });
-                User.findById(req.user._id, function(err, user) {
-                    if(err) {
-                        res.send(err);
-                    }
-                    user.occupied = true;
-                    user.thread = threadid;
-                    user.save();
-                })
-                req.user.occupied = true;
-                req.user.thread = threadid;
-                res.status(200).json(thread);
             }
             else {
                 res.status(500).send('Mar tagja vagy egy threadnek!');

@@ -22,7 +22,7 @@ module.exports = (passport, router) => {
             var thread = req.body.threadid;
             Thread.findById(thread, function(err, threadd) {
                 if(req.user.thread==threadd._id) {
-                    if(!threadd.started) {
+                    if(threadd.started) {
                         if(!threadd.closed) {
                             var creator = req.user._id;
                             
