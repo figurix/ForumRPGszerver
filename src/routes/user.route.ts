@@ -86,6 +86,11 @@ module.exports = (passport, router) => {
     router.post('/del', (req, res, next) => {
         if(req.isAuthenticated()) {
             if(req.user.admin) {
+                Thread.findOne({_id: req.body.thread}, function (err, t) {
+                    if(err) res.status(500).send(err);
+                    t.partcount = t.partcount-1;
+                    t.save();
+                });
                 User.remove({ _id: req.body.userid}, function (err) {
                     if (err) res.status(500).send(err);
                     else res.status(200).send("torolve");
