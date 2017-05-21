@@ -68,14 +68,7 @@ UserSchema.methods.comparePassword = function comparePassword(candidatePassword,
     cb(null, isMatch);
   });
 };
-/*
-UserSchema.pre('remove', function preRM(next) {
-  console.log(this._id);
-  this.model('PostSchema').remove({ creator: this._id }, {multi: true} , next);
-  //this.model('ThreadSchema').remove({ creator: this._id });
-  console.log("itt vagyok");
-});
-*/
+
 UserSchema.pre('remove', function(next) {
   var _this = this;
   Thread.remove({creator: _this._id}).exec();

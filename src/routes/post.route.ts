@@ -22,15 +22,25 @@ module.exports = (passport, router) => {
             var thread = req.body.threadid;
             Thread.findById(thread, function(err, threadd) {
                 if(req.user.thread==threadd._id) {
-                    var creator = req.user._id;
-                    
-                    var text = req.body.text;
-                    var post = new Post({creator: creator, thread: thread, text: text});
-                    post.save();
-                    
-                    threadd.postcount = threadd.postcount+1;
-                    threadd.save();
-                    res.status(200).send("elmentve");
+                    if(!threadd.started) {
+                        if(!threadd.closed) {
+                            var creator = req.user._id;
+                            
+                            var text = req.body.text;
+                            var post = new Post({creator: creator, thread: thread, text: text});
+                            post.save();
+                            
+                            threadd.postcount = threadd.postcount+1;
+                            threadd.save();
+                            res.status(200).send("elmentve");
+                        }
+                        else {
+                            res.status(503).send("a threadet mar lezartak");
+                        }
+                    }
+                    else {
+                        res.status(503).send("a thread meg nem nyilt meg");
+                    }
                 }
                  else {
                     res.status(403).send("Nem tartozol a kalandhoz!");
@@ -48,16 +58,21 @@ module.exports = (passport, router) => {
                 var threadid;
                 Post.findOne({_id: req.body.postid}, function (err,p) {
                     if(err) res.status(500).send(err);
-                    threadid = p.thread;
-                    Thread.findOne({_id: threadid}, function (err, t) {
-                        if(err) res.status(500).send(err);
-                        t.postcount = t.postcount-1;
-                        t.save();
-                    });
-                });
-                Post.remove({ _id: req.body.postid}, function (err) {
-                if (err) res.status(500).send(err);
-                else res.status(200).send("torolve");
+                    if(p != null) {
+                        threadid = p.thread;
+                        Thread.findOne({_id: threadid}, function (err, t) {
+                            if(err) res.status(500).send(err);
+                            t.postcount = t.postcount-1;
+                            t.save();
+                            Post.remove({ _id: req.body.postid}, function (err) {
+                                if (err) res.status(500).send(err);
+                                else res.status(200).send("torolve");
+                            });
+                        });
+                    }
+                    else {
+                        res.status(404).send("a thread nem talalhato");
+                    }
                 });
                 
             }

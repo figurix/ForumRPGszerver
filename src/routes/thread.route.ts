@@ -55,7 +55,7 @@ module.exports = (passport, router) => {
     router.post('/join', (req, res, next) => {
         if(req.isAuthenticated()) {
             var query = Thread.findOne({ _id: req.body.threadid});
-            query.select('title mainpost maxcount partcount minlevel maxlevel creator postcount');
+            query.select('title mainpost maxcount partcount minlevel maxlevel creator postcount closed started');
             query.exec(function(err, thread) {
                 if(err) {
                     res.send(err);
@@ -64,16 +64,24 @@ module.exports = (passport, router) => {
                     if(req.user.character.level>=thread.minlevel) {
                         if(req.user.character.level<=thread.maxlevel) {
                             if(!req.user.occupied) {
-                                thread.partcount = thread.partcount + 1;
-                                thread.save();
-                                User.findById(req.user._id, function(err, user) {
-                                    user.occupied = true;
-                                    user.thread = req.body.threadid;
-                                    user.save();
-                                })
-                                req.user.occupied = true;
-                                req.user.thread = req.body.threadid;
-                                res.status(200).send("Siker");
+                                if(!thread.closed) {
+                                    thread.partcount = thread.partcount + 1;
+                                    if(thread.partcount === thread.maxcount) {
+                                        thread.started = true;
+                                    }
+                                    thread.save();
+                                    User.findById(req.user._id, function(err, user) {
+                                        user.occupied = true;
+                                        user.thread = req.body.threadid;
+                                        user.save();
+                                    })
+                                    req.user.occupied = true;
+                                    req.user.thread = req.body.threadid;
+                                    res.status(200).send("Siker");
+                                }
+                                else {
+                                    res.status(500).send("a thread le van zarva");
+                                }
                             }
                             else {
                                 res.status(500).send("Mar reszt veszel egy kalandban");
